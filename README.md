@@ -1,3 +1,3 @@
 # electron-quick-start
 
-do `npm install` i think
+do `npm install` i think.
