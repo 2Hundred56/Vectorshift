@@ -3,13 +3,47 @@ VectorShift
 
 An open source, lightweight vector illustration program
 */
-h1 {
+h1,button {
     font-family: 'Source Sans Pro', sans-serif;
     color: rgb(147, 161, 161);
 }
-h2 {
+h2,p {
     font-family: 'Source Sans Pro', sans-serif;
     color: rgb(101, 123, 131);
+}
+p, input {
+    font-size: 16pt;
+
+}
+input {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: rgb(101, 123, 131);
+    background-color: transparent;
+    border-color: transparent;
+    outline: 0;
+
+}
+button {
+    text-align: center;
+    background-color: rgb(28, 43, 48);
+    border-color: transparent;
+    font-size: 16px;
+    outline: 0;
+    border-radius: 5px;
+}
+span {
+    width:100%;
+
+}
+.inline {
+    display:inline-block;
+    margin-left:10px;
+}
+.inline-nomargin {
+    display:inline-block;
+}
+.numberspec {
+    width:50px;
 }
 .label {
     font-family: 'Source Sans Pro', sans-serif;
@@ -30,11 +64,15 @@ h2 {
     background-color: rgb(8, 25, 30);
     overflow-x: hidden;
     z-index: 0;
-    padding-top: 0px;
-    padding-left: 00px;
+    padding-top: 10px;
+    padding-left: 180px;
     position: fixed;
     top: 0; /* Stay at the top */
     left: 0;
+
+}
+button:hover {
+    background-color: rgb(23, 36, 40);
 }
 .toolbar {
     height: 100%; /* Full-height: remove this if you want "auto" height */
@@ -47,6 +85,19 @@ h2 {
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 0px;
     padding-left: 00px;
+}
+.canvas-container { /* CSS is an awful invention */
+    position: fixed;
+    top:90px;
+    left:160px;
+    display: inline-block;
+    z-index: 1;
+
+}
+.main-canvas {
+    height:100%;
+    width:100%;
+    position: fixed;
 }
 body {
     background-color: rgb(23, 36, 40);

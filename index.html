@@ -6,21 +6,29 @@
     <meta charset="UTF-8">
 
     <link rel="stylesheet" href="vectorshift.css">
+    <script type="text/javascript" src="processing.min.js"></script>
+    <title>VectorShift Alpha</title>
 
-    <title>Hello World!</title>
 </head>
 <body>
     <div class="top">
-
+        <input id="xsize" class="numberspec inline" value="600"></input>
+        <p class="inline-nomargin">x</p>
+        <input id="ysize" class="numberspec inline" value="600" ></input>
+        <button class="inline" onclick="onResize()">Resize</button>
     </div>
     <div class="toolbar">
         <p class="label">Tools</p>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="main-canvas"> </canvas>
+        <script src="vectorshift.js"></script>
     </div>
     <script>
     // You can also require other files to run in this process
     require('./renderer.js')
     </script>
 
-</div>
 </body>
 </html>
