@@ -4,30 +4,63 @@ class Vector {
         this.y = y;
     }
 }
+
 class Shape {
-    function init() {
+    constructor (origin,starting) {
         this.nodes = [];
         this.closed = true;
-    }
-    constructor (pos,starting) {
-        init();
+        this.color = processing.color(0);
+        var shape = [];
+
         if (starting == "rect") {
+            shape = [
+                [-50, -50],
+                [ 50, -50],
+                [ 50,  50],
+                [-50,  50]
+            ]
+        }
+        for (var i=0;i<shape.length;i++) {
+            var pos = shape[i];
+            this.nodes.push(
+                new Vector(pos[0]+origin[0],pos[1]+origin[1])
+            );
+        }
+        console.log(this.nodes);
+    }
+    render () {
+        processing.fill(this.color);
+        processing.beginShape();
+        for (var i=0;i<this.nodes.length;i++) {
+            var node = this.nodes[i];
+
+            processing.vertex(node.x,node.y);
+        }
+        processing.endShape();
+    }
+}
+class Drawing {
+    constructor (canvasSize,bgColor) {
+        setCanvasSize(canvasSize[0],canvasSize[1]);
+        this.bgColor = bgColor;
+        this.shapes = [];
+    }
+    render () {
+        processing.background(this.bgColor);
+        for (var shapeIndex=0;shapeIndex<this.shapes.length;shapeIndex++) {
+            var shape = this.shapes[shapeIndex];
+            shape.render();
 
         }
     }
 }
-function factorial (n) {
-  if (n == 0 || n == 1)
-    return 1;
-  if (f[n] > 0)
-    return f[n];
-  return f[n] = factorial(n-1) * n;
-} ​
-
 var canvasSize;
 var processing;
+var drawing;
+
 function init() {
-    setCanvasSize(600,600);
+    drawing = new Drawing([600,600],new processing.color(255));
+    drawing.shapes.push(new Shape([100,100],"rect"));
 }
 function onResize() {
     var xSize = parseInt(document.getElementById("xsize").value);
@@ -43,15 +76,19 @@ function setCanvasSize(x,y) {
     processing.size(canvasSize.x,canvasSize.y);
     processing.background(255,255,255);
 }
+function redraw () {
+    drawing.render();
+
+}
 function sketchProc(_processing) {
     processing = _processing;
     processing.draw = function() {
+        redraw();
+
     }
     processing.setup = function() {
-
         init();
 
-        processing.fill(255);
         var fontA = processing.loadFont("courier");
         processing.textFont(fontA, 24);
 
