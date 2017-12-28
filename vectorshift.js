@@ -9,7 +9,7 @@ class Shape {
     constructor (origin,starting) {
         this.nodes = [];
         this.closed = true;
-        this.color = processing.color(0);
+        this.color = proc.color(0);
         var shape = [];
 
         if (starting == "rect") {
@@ -29,14 +29,13 @@ class Shape {
         console.log(this.nodes);
     }
     render () {
-        processing.fill(this.color);
-        processing.beginShape();
+        proc.fill(this.color);
+        proc.beginShape();
         for (var i=0;i<this.nodes.length;i++) {
             var node = this.nodes[i];
-
-            processing.vertex(node.x,node.y);
+            proc.vertex(node.x,node.y);
         }
-        processing.endShape();
+        proc.endShape();
     }
 }
 class Drawing {
@@ -46,7 +45,7 @@ class Drawing {
         this.shapes = [];
     }
     render () {
-        processing.background(this.bgColor);
+        proc.background(this.bgColor);
         for (var shapeIndex=0;shapeIndex<this.shapes.length;shapeIndex++) {
             var shape = this.shapes[shapeIndex];
             shape.render();
@@ -61,6 +60,7 @@ var drawing;
 function init() {
     drawing = new Drawing([600,600],new processing.color(255));
     drawing.shapes.push(new Shape([100,100],"rect"));
+
 }
 function onResize() {
     var xSize = parseInt(document.getElementById("xsize").value);
@@ -73,24 +73,39 @@ function onResize() {
 }
 function setCanvasSize(x,y) {
     canvasSize = new Vector(x,y);
-    processing.size(canvasSize.x,canvasSize.y);
-    processing.background(255,255,255);
+    proc.size(canvasSize.x,canvasSize.y);
+    proc.background(255,255,255);
 }
 function redraw () {
     drawing.render();
+    var mousePos = new Vector(proc.mouseX,proc.mouseY);
 
 }
 function sketchProc(_processing) {
     processing = _processing;
-    processing.draw = function() {
+    proc = _processing;
+    proc.draw = function() {
         redraw();
+        var mousePos = new Vector(proc.mouseX-180, proc.mouseY-110);
+        for (var i in drawing.shapes) {
+            let shape = drawing.shapes[i];
+            for (var j in shape.nodes) {
+                let node = shape.nodes[j];
+                if (distance(mousePos,node) < 5) {
+                    proc.fill(244, 152, 66);
+                    proc.ellipse(node.x,node.y,8,8);
 
+                } else {
+
+                }
+            }
+        }
     }
-    processing.setup = function() {
+    proc.setup = function() {
         init();
 
-        var fontA = processing.loadFont("courier");
-        processing.textFont(fontA, 24);
+        var fontA = proc.loadFont("courier");
+        proc.textFont(fontA, 24);
 
     }
 }
