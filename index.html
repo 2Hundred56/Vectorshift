@@ -1,37 +1,25 @@
 <!DOCTYPE html>
 <html>
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300" rel="stylesheet">
-
+<style>
+canvas {
+    width: 100%;
+    height: 100%;
+}
+</style>
 <head>
     <meta charset="UTF-8">
-
-    <link rel="stylesheet" href="vectorshift.css">
     <script type="text/javascript" src="processing.min.js"></script>
+    <script type="text/javascript" src="py_interface.js"></script>
     <title>VectorShift Alpha</title>
 
 </head>
 <body>
-    <div class="top">
-        <input id="xsize" class="numberspec inline" value="600"></input>
-        <p class="inline-nomargin">x</p>
-        <input id="ysize" class="numberspec inline" value="600" ></input>
-        <button class="inline" onclick="onResize()">Resize</button>
-    </div>
-    <div class="toolbar">
-        <p class="label">Tools</p>
-        <button class="toolbar-button">Square</button>
-    </div>
-
-    <div class="canvas-container">
-        <canvas class="main-canvas" id="main-canvas"> </canvas>
-        <script src="core.js"></script>
-        <script src="utils.js"></script>
-        <script src="vectorshift.js"></script>
-    </div>
+    <canvas class="main-canvas" id="main-canvas"> </canvas>
+    <script type="text/javascript" src="vectorshift.js"></script>
     <script>
     // You can also require other files to run in this process
     require('./renderer.js')
     </script>
-
 </body>
 </html>

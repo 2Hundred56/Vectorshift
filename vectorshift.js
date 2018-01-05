@@ -1,73 +1,40 @@
+var PythonShell = require('python-shell');
+var pyshell = new PythonShell('vshift_python/main.py');
 
-var canvasSize;
-var processing;
-var drawing;
+// sends a message to the Python script via stdin
+pyshell.send('start-process');
 
-function init() {
-    drawing = new Drawing([600,600],new processing.color(255));
-    drawing.shapes.push(new Shape([100,100],"rect"));
+var queue = [];
 
-}
-function onResize() {
-    var xSize = parseInt(document.getElementById("xsize").value);
-    var ySize = parseInt(document.getElementById("ysize").value);
-    if (xSize == NaN || ySize == NaN) {
-        alert("Invalid input");
-    } else {
-        setCanvasSize(xSize,ySize);
+pyshell.on('message', function (message) {
+  // received a message sent from the Python script (a simple "print" statement)
+  queue.push(message);
+});
+
+function sketchProc(processing) {
+    processing.setup = function() {
+        processing.background(100);
     }
-}
-function setCanvasSize(x,y) {
-    canvasSize = new Vector(x,y);
-    proc.size(canvasSize.x,canvasSize.y);
-    proc.background(255,255,255);
-}
-function redraw () {
-    drawing.render();
-    var mousePos = new Vector(proc.mouseX,proc.mouseY);
 
-}
-var mousePressed = false;
-function sketchProc(_processing) {
-    processing = _processing;
-    proc = _processing;
-    proc.draw = function() {
-        redraw();
-        let mousePos = new Vector(proc.mouseX-180, proc.mouseY-110);
-        let mouseDown = mousePressed && (proc.mouseButton == proc.LEFT);
-        for (var i in drawing.shapes) {
-            let shape = drawing.shapes[i];
-            for (var j in shape.nodes) {
-                let node = shape.nodes[j];
-                let mDist = distance(mousePos,node);
-                if (mDist < 5) {
-                    proc.fill(244, 152, 66);
-                    proc.ellipse(node.x,node.y,8,8);
-
-                }
-                if (mouseDown) {
-
-                    if (mDist < 100) {
-                        console.log(sub(node,mousePos).normalized());
-                        drawing.shapes[i].nodes[j] = sub(node,sub(node,mousePos).normalized()); // JS is an awful language
-                    }
-                }
+    processing.draw = function() {
+        pyshell.send('sig-start');
+        while (true) {
+            if (queue[queue.length - 1] == "$end") {
+                break
             }
         }
-    }
-    proc.setup = function() {
-        init();
+        // Execute all js code in the queue
+        for (var i=0;i<queue.length;i++) {
+            if (queue[i].startsWith("$")) { // "$" commands are ignored as meta-instructions
 
-        var fontA = proc.loadFont("courier");
-        proc.textFont(fontA, 24);
+            } else {
+                eval(queue[i]);
+            }
+        }
+        queue = [];
 
-    }
-    proc.mousePressed = function() {
-        mousePressed = true;
-    }
-    proc.mouseReleased = function() {
-        mousePressed = false;
     }
 }
 var canvas = document.getElementById("main-canvas");
+// attaching the sketchProc function to the canvas
 var processingInstance = new Processing(canvas, sketchProc);
