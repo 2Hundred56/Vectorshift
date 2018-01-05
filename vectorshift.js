@@ -10,14 +10,14 @@ pyshell.on('message', function (message) {
   // received a message sent from the Python script (a simple "print" statement)
   queue.push(message);
 });
-
+console.log("ready");
 function sketchProc(processing) {
     processing.setup = function() {
         processing.background(100);
     }
 
     processing.draw = function() {
-        pyshell.send('sig-start');
+        pyshell.send('sig-startupdate');
         while (true) {
             if (queue[queue.length - 1] == "$end") {
                 break
@@ -25,6 +25,7 @@ function sketchProc(processing) {
         }
         // Execute all js code in the queue
         for (var i=0;i<queue.length;i++) {
+            console.log(queue[i]);
             if (queue[i].startsWith("$")) { // "$" commands are ignored as meta-instructions
 
             } else {
